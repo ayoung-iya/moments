@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+  .secondary-button {
+    @apply w-full bg-stone-100 font-medium rounded-full text-center hover:bg-stone-300 disabled:bg-stone-200
+  }
+}
