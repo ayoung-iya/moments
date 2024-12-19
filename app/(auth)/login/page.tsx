@@ -11,7 +11,7 @@ export default function Login() {
 
   return (
     <div className="mx-auto mt-12 max-w-screen-sm px-3">
-      <span className="mb-10 block w-full text-center text-4xl">Comments</span>
+      <span className="mb-10 block w-full text-center text-4xl">Moments</span>
       <form action={action} className="flex flex-col gap-3">
         <FormInput
           type="email"
