@@ -1,23 +1,16 @@
-import { ForwardRefExoticComponent } from "react";
+import { ForwardRefExoticComponent, InputHTMLAttributes } from "react";
 
-interface FormInputProps {
-  type: string;
+interface FormInputProps extends InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  placeholder: string;
-  required: boolean;
-  defaultValue: string | null;
   errorMessage?: string;
   Icon?: ForwardRefExoticComponent<any>;
 }
 
-export default function FormInput({
-  type,
+export default function Input({
   name,
-  placeholder,
-  required,
-  defaultValue,
   errorMessage,
   Icon,
+  ...rest
 }: FormInputProps) {
   return (
     <div>
@@ -26,12 +19,9 @@ export default function FormInput({
       >
         {Icon && <Icon className="size-5 text-stone-500" />}
         <input
-          type={type}
           name={name}
-          placeholder={placeholder}
-          className="h-10 placeholder:text-stone-500 w-full"
-          required={required}
-          defaultValue={defaultValue || ""}
+          className="h-10 w-full placeholder:text-stone-500"
+          {...rest}
         />
       </div>
       {errorMessage && <p className="text-red-600">{errorMessage}</p>}
