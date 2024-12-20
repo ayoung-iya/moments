@@ -1,10 +1,11 @@
 "use client";
 
 import FormButton from "@/components/formButton";
-import FormInput from "@/components/formInput";
+import Input from "@/components/input";
 import { EnvelopeIcon, UserIcon, KeyIcon } from "@heroicons/react/24/solid";
 import { useActionState } from "react";
 import { handleForm } from "./action";
+import { PASSWORD_MIN_LENGTH, USERNAME_MIN_LENGTH } from "@/lib/constants";
 
 export default function Login() {
   const [state, action] = useActionState(handleForm, null);
@@ -13,32 +14,34 @@ export default function Login() {
     <div className="mx-auto mt-12 max-w-screen-sm px-3">
       <span className="mb-10 block w-full text-center text-4xl">Moments</span>
       <form action={action} className="flex flex-col gap-3">
-        <FormInput
+        <Input
           type="email"
           name="email"
           placeholder="이메일"
           required
-          defaultValue={state && state.data.email}
+          defaultValue={state?.data.email}
           Icon={EnvelopeIcon}
-          errorMessage={state?.errors?.email}
+          errorMessage={state?.errors?.email?.[0]}
         />
-        <FormInput
+        <Input
           type="text"
           name="username"
           placeholder="이름"
+          defaultValue={state?.data.username}
           required
-          defaultValue={state && state.data.username}
+          minLength={USERNAME_MIN_LENGTH}
           Icon={UserIcon}
-          errorMessage={state?.errors?.username}
+          errorMessage={state?.errors?.username?.[0]}
         />
-        <FormInput
+        <Input
           type="password"
           name="password"
           placeholder="비밀번호"
           required
-          defaultValue={state && state.data.password}
+          min={PASSWORD_MIN_LENGTH}
+          defaultValue={state?.data.password}
           Icon={KeyIcon}
-          errorMessage={state?.errors?.password}
+          errorMessage={state?.errors?.password?.[0]}
         />
         <FormButton>로그인</FormButton>
       </form>
