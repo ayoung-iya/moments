@@ -13,18 +13,21 @@ export const ERROR_MESSAGE = {
   password: {
     required: "비밀번호를 입력해주세요.",
     min: "비밀번호는 최소 10자 이상이어야합니다.",
-    pattern:
-      "비밀번호에는 최소 하나의 소문자, 대문자, 숫자, 그리고 특수문자(@$!%*?&)가 포함되어야 합니다.",
+    pattern: "비밀번호에는 최소 하나의 소문자, 대문자, 숫자, 그리고 특수문자(@$!%*?&)가 포함되어야 합니다.",
     match: "비밀번호가 일치하지 않습니다.",
   },
-  login: '아이디 또는 비밀번호가 잘못 되었습니다.'
+  login: "아이디 또는 비밀번호가 잘못 되었습니다.",
+  tweet: {
+    required: "모멘트를 입력해주세요.",
+  },
 };
 
 export const USERNAME_MIN_LENGTH = 2;
 export const PASSWORD_MIN_LENGTH = 10;
-export const PASSWORD_REGEX =
-  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+export const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
 export const VALID_EMAIL = "@zod.com";
 
 export const PASSWORD_SALT_ROUNDS = 12;
+
+export const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
