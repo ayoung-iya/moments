@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import {getSession} from "./lib/session";
+import { getSession } from "./lib/session";
 
 const PUBLIC_URLS = new Set(["/", "/login", "/create-account"]);
 
@@ -17,7 +17,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)"],
 };
