@@ -12,7 +12,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (session.id && isPublicPath) {
-    return NextResponse.redirect(new URL("/products", request.url));
+    return NextResponse.redirect(new URL("/tweet", request.url));
   }
 }
 
