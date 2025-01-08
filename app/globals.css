@@ -10,12 +10,12 @@
 }
 @layer components {
   .button {
-    @apply flex w-full items-center justify-center rounded-full text-center font-medium;
+    @apply flex w-full items-center justify-center rounded-full text-center font-medium text-stone-900 disabled:cursor-not-allowed disabled:text-opacity-60;
   }
   .primary-button {
     @apply button bg-yellow-800 bg-opacity-90 text-white hover:bg-opacity-100 focus:bg-opacity-100 disabled:bg-stone-500;
   }
   .secondary-button {
-    @apply button bg-stone-100 hover:bg-stone-300 disabled:bg-stone-200;
+    @apply button bg-stone-200 hover:bg-stone-300 disabled:bg-stone-100;
   }
 }
