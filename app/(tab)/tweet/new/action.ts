@@ -6,19 +6,33 @@ import { getSession } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
-const tweetSchema = z.object({
-  tweet: z
-    .string({
-      required_error: ERROR_MESSAGE.tweet.required,
-    })
-    .min(1, ERROR_MESSAGE.tweet.required),
-  photo: z.string().optional(),
-});
+const tweetSchema = z
+  .object({
+    tweet: z
+      .string({
+        required_error: ERROR_MESSAGE.tweet.required,
+      })
+      .min(1, ERROR_MESSAGE.tweet.required),
+    photo: z.string().optional(),
+    photoWidth: z.coerce.number().optional(),
+    photoHeight: z.coerce.number().optional(),
+  })
+  .superRefine(({ photo, photoWidth, photoHeight }, ctx) => {
+    if (photo && !(photoWidth || photoHeight)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: ERROR_MESSAGE.photo.size,
+        path: ["photo"],
+      });
+    }
+  });
 
 export const handleForm = async (_: any, formData: FormData) => {
   const data = {
     tweet: formData.get("tweet") as string,
     photo: formData.get("photo"),
+    photoWidth: formData.get("photoWidth"),
+    photoHeight: formData.get("photoHeight"),
   };
 
   const result = tweetSchema.safeParse(data);
@@ -47,6 +61,8 @@ export const handleForm = async (_: any, formData: FormData) => {
     data: {
       tweet: result.data.tweet,
       photo: result.data.photo || null,
+      photoWidth: result.data.photoWidth || undefined,
+      photoHeight: result.data.photoHeight || undefined,
       user: {
         connect: {
           id: session.id,

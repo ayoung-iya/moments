@@ -12,10 +12,12 @@ import { redirect } from "next/navigation";
 export default function NewTweet() {
   const [tweet, setTweet] = useState("");
   const [preview, setPreview] = useState("");
-  const [photoRatio, setPhotoRatio] = useState(14 / 1);
+  const [photoSize, setPhotoSize] = useState<{ width: number; height: number } | null>(null);
   const [uploadURL, setUploadURL] = useState("");
   const [photoId, setPhotoId] = useState("");
   const { showToast } = useContext(ToastController);
+
+  const photoRatio = photoSize ? photoSize.width / photoSize.height : 14 / 1;
 
   const handleTweetChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setTweet(e.target.value);
@@ -42,7 +44,7 @@ export default function NewTweet() {
     const image = new Image();
     image.src = url;
     image.onload = () => {
-      setPhotoRatio(image.width / image.height);
+      setPhotoSize({ width: image.width, height: image.height });
     };
 
     const { result, success } = await getUploadUrl();
@@ -54,7 +56,7 @@ export default function NewTweet() {
 
   const handlePhotoDelete = () => {
     setPreview("");
-    setPhotoRatio(14 / 1);
+    setPhotoSize(null);
     setUploadURL("");
     setPhotoId("");
   };
@@ -81,6 +83,11 @@ export default function NewTweet() {
       }
     }
 
+    if (photoSize) {
+      formData.set("photoWidth", photoSize.width + "");
+      formData.set("photoHeight", photoSize.height + "");
+    }
+
     formData.set("photo", photoURL);
 
     return handleForm(_, formData);
@@ -88,6 +95,7 @@ export default function NewTweet() {
 
   const [state, action] = useActionState(interceptAction, null);
   const sessionErrorMessage = state?.errors?.session?.[0];
+  const photoErrorMessage = state?.errors?.session?.[0];
 
   useEffect(() => {
     if (sessionErrorMessage) {
@@ -97,7 +105,13 @@ export default function NewTweet() {
 
       redirect("/login");
     }
-  }, [sessionErrorMessage, showToast]);
+
+    if (photoErrorMessage) {
+      showToast({
+        message: photoErrorMessage,
+      });
+    }
+  }, [sessionErrorMessage, photoErrorMessage, showToast]);
 
   return (
     <div className="mt-5 flex w-full flex-col items-center gap-5">
@@ -121,14 +135,14 @@ export default function NewTweet() {
         <div className="relative">
           <label
             htmlFor="photo"
-            className="relative flex w-full cursor-pointer rounded-md border border-stone-200 bg-contain bg-center bg-no-repeat"
+            className="relative flex w-full cursor-pointer rounded-md border border-stone-200 bg-white bg-contain bg-center bg-no-repeat"
             style={{
               backgroundImage: `url(${preview})`,
               aspectRatio: photoRatio,
             }}
           >
             {!preview && (
-              <div className="flex w-full items-center justify-center gap-2 rounded-md text-stone-600 shadow-sm">
+              <div className="flex w-full items-center justify-center gap-2 rounded-md text-stone-800 shadow-sm">
                 <PhotoIcon className="size-6" />
                 <p className="text-sm">사진 추가하기</p>
               </div>
