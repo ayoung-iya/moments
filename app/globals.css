@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer base {
+  body {
+    @apply bg-stone-100 text-sm has-[.modal]:overflow-hidden;
+  }
   a,
   button {
     outline: none;
@@ -17,5 +20,15 @@
   }
   .secondary-button {
     @apply button bg-stone-200 hover:bg-stone-300 disabled:bg-stone-100;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    @apply size-2;
+  }
+  .scrollbar-custom::-webkit-scrollbar-track {
+    @apply rounded-full bg-transparent;
+  }
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-neutral-300;
   }
 }
