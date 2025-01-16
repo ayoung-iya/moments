@@ -11,7 +11,7 @@ export default function FormButton({ children, disabled }: FormButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <button className="secondary-button h-12 focus:scale-95" disabled={pending || disabled}>
+    <button className="primary-button h-12 focus:scale-95" disabled={pending || disabled}>
       {pending ? "제출 중" : children}
     </button>
   );
