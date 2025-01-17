@@ -18,7 +18,19 @@ const tweetSchema = z
     photoHeight: z.coerce.number().optional(),
   })
   .superRefine(({ photo, photoWidth, photoHeight }, ctx) => {
-    if (photo && !(photoWidth || photoHeight)) {
+    if (!(photo || photoWidth || photoHeight)) {
+      return;
+    }
+
+    if (!photo) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: ERROR_MESSAGE.photo.url,
+        path: ["photo"],
+      });
+    }
+
+    if (!(photoWidth || photoHeight)) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         message: ERROR_MESSAGE.photo.size,

@@ -48,6 +48,7 @@ export default function NewTweet() {
     };
 
     const { result, success } = await getUploadUrl();
+
     if (success) {
       setUploadURL(result.uploadURL);
       setPhotoId(result.id);
@@ -63,7 +64,6 @@ export default function NewTweet() {
 
   const interceptAction = async (_: any, formData: FormData) => {
     const file = formData.get("photo");
-    const photoURL = photoId ? cloudflareImageURL(photoId) : "";
 
     if (file instanceof File && file.size) {
       const cloudflareFormData = new FormData();
@@ -74,6 +74,8 @@ export default function NewTweet() {
       });
 
       if (response.status !== 200) {
+        console.error(response.text);
+
         showToast({
           message: "이미지 업로드에 문제가 생겼습니다. 다시 시도해주세요.",
           status: "error",
@@ -81,14 +83,13 @@ export default function NewTweet() {
 
         return;
       }
-    }
 
-    if (photoSize) {
-      formData.set("photoWidth", photoSize.width + "");
-      formData.set("photoHeight", photoSize.height + "");
+      formData.set("photo", cloudflareImageURL(photoId));
+      formData.set("photoWidth", photoSize?.width + "");
+      formData.set("photoHeight", photoSize?.height + "");
+    } else {
+      formData.set("photo", "");
     }
-
-    formData.set("photo", photoURL);
 
     return handleForm(_, formData);
   };

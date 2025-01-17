@@ -21,8 +21,9 @@ export const ERROR_MESSAGE = {
     required: "모멘트를 입력해주세요.",
   },
   photo: {
-    size: '사진의 사이즈 정보가 필요합니다.'
-  }
+    url: "사진 url 정보가 없습니다.",
+    size: "사진의 사이즈 정보가 필요합니다.",
+  },
 };
 
 export const USERNAME_MIN_LENGTH = 2;
