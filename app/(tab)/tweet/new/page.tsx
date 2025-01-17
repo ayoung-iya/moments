@@ -66,6 +66,15 @@ export default function NewTweet() {
     const file = formData.get("photo");
 
     if (file instanceof File && file.size) {
+      if (!photoId) {
+        showToast({
+          message: "이미지 업로드에 문제가 생겼습니다. 다시 등록해주세요.",
+          status: "error",
+        });
+        handlePhotoDelete();
+        return;
+      }
+
       const cloudflareFormData = new FormData();
       cloudflareFormData.append("file", file);
       const response = await fetch(uploadURL, {
