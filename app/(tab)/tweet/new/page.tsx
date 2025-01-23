@@ -108,6 +108,10 @@ export default function NewTweet() {
   const photoErrorMessage = state?.errors?.session?.[0];
 
   useEffect(() => {
+    if (state?.success) {
+      redirect("/tweet");
+    }
+
     if (sessionErrorMessage) {
       showToast({
         message: sessionErrorMessage,
@@ -121,7 +125,7 @@ export default function NewTweet() {
         message: photoErrorMessage,
       });
     }
-  }, [sessionErrorMessage, photoErrorMessage, showToast]);
+  }, [sessionErrorMessage, photoErrorMessage, showToast, state?.success]);
 
   return (
     <div className="mt-5 flex w-full flex-col items-center gap-5">
