@@ -1,4 +1,4 @@
-import CommentForm from "@/components/commentForm";
+import CommentCreateForm from "@/components/commentCreateForm";
 import TweetDetails from "@/components/tweetDetails";
 import FramedInterceptModal from "@/components/framedInterceptModal";
 import db from "@/lib/db";
@@ -79,15 +79,17 @@ export default async function ModalTweet({ params }: { params: Promise<{ id: str
   return (
     <CommentsProvider comments={comments}>
       <FramedInterceptModal>
-        <div className="flex h-full flex-col divide-y">
-          <div className="flex h-14 shrink-0 items-center justify-center">
+        <div className="flex h-full flex-col">
+          <div className="flex h-14 shrink-0 items-center justify-center border-b">
             <span className="text-lg font-bold">{tweet.username}님의 게시물</span>
           </div>
           <div className="scrollbar-custom grow overflow-y-auto p-3">
             <TweetDetails {...tweet} />
-            <CommentList initialScrollToTop/>
+            <CommentList />
           </div>
-          <CommentForm tweetId={+id} username={myInfo!.username} />
+          <div className="shadow-top">
+            <CommentCreateForm tweetId={+id} username={myInfo!.username} />
+          </div>
         </div>
       </FramedInterceptModal>
     </CommentsProvider>
