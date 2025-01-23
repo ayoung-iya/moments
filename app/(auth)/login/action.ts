@@ -58,5 +58,5 @@ export const handleForm = async (prevData: any, formData: FormData) => {
 
   await updateSessionUserId(user.id);
 
-  redirect("/profile");
+  redirect("/");
 };
