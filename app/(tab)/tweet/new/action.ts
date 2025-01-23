@@ -3,7 +3,6 @@
 import { ERROR_MESSAGE } from "@/lib/constants";
 import db from "@/lib/db";
 import { getSession } from "@/lib/session";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 const tweetSchema = z
@@ -51,6 +50,7 @@ export const handleForm = async (_: any, formData: FormData) => {
 
   if (!result.success) {
     return {
+      success: result.success,
       errors: { ...result.error.flatten().fieldErrors, session: null },
       data,
     };
@@ -60,6 +60,7 @@ export const handleForm = async (_: any, formData: FormData) => {
 
   if (!session.id) {
     return {
+      success: false,
       errors: {
         tweet: null,
         photo: null,
@@ -83,7 +84,11 @@ export const handleForm = async (_: any, formData: FormData) => {
     },
   });
 
-  redirect("/tweet");
+  return {
+    success: result.success,
+    errors: null,
+    data: result.data,
+  };
 };
 
 export const getUploadUrl = async () => {
