@@ -17,12 +17,12 @@ export default function TweetDetails({
         <Tweet.Content>{tweet}</Tweet.Content>
       </div>
       {photo && <Tweet.Image url={photo} width={photoWidth!} height={photoHeight!} />}
-      <Tweet.ButtonLIst>
+      <Tweet.ButtonList>
         <Tweet.Button className="hover:bg-stone-100">좋아요</Tweet.Button>
         <Tweet.Button as="a" href={`/tweet/${id}`} className="hover:bg-stone-100">
           댓글달기
         </Tweet.Button>
-      </Tweet.ButtonLIst>
+      </Tweet.ButtonList>
     </>
   );
 }
