@@ -30,6 +30,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} mx-auto min-w-80 max-w-screen-lg antialiased`}>
         <ToastProvider>
           <Suspense>
+            <div id='modal'/>
             {children}
             <ToastContainer />
           </Suspense>
