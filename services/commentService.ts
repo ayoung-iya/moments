@@ -57,8 +57,6 @@ export const deleteComment = async (id: number) => {
     await db.comment.delete({
       where: { id },
     });
-
-    revalidateTag("comments");
   } catch (e) {
     if ((e as PrismaClientKnownRequestError).code === "P2025")
       return {
@@ -66,5 +64,7 @@ export const deleteComment = async (id: number) => {
           message: "존재하지 않는 id입니다.",
         },
       };
+  } finally {
+    revalidateTag("comments");
   }
 };
