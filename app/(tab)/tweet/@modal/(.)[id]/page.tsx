@@ -84,7 +84,7 @@ export default async function ModalTweet({ params }: { params: Promise<{ id: str
             <span className="text-lg font-bold">{tweet.username}님의 게시물</span>
           </div>
           <div className="scrollbar-custom grow overflow-y-auto p-3">
-            <TweetDetails {...tweet} />
+            <TweetDetails {...tweet} currentUserId={myInfo!.id} />
             <CommentList />
           </div>
           <div className="shadow-top">
