@@ -1,5 +1,6 @@
 import TweetItem from "@/components/tweetDetails";
 import db from "@/lib/db";
+import { getSession } from "@/lib/session";
 import { notFound } from "next/navigation";
 
 const fetchTweet = async (id: number) => {
@@ -31,10 +32,11 @@ const fetchTweet = async (id: number) => {
 
 export default async function Tweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const session = await getSession();
   if (!Number.isInteger(+id)) {
     return notFound();
   }
   const tweet = await fetchTweet(+id);
 
-  return <TweetItem {...tweet} />;
+  return <TweetItem {...tweet} currentUserId={session.id!} />;
 }

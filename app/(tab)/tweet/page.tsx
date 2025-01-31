@@ -26,7 +26,7 @@ export default async function Tweet() {
           어떤 순간을 경험하고 계신가요?
         </Link>
       </div>
-      <TweetList initialData={tweetsData} />
+      <TweetList initialData={tweetsData} currentUserId={me!.id} />
     </div>
   );
 }
