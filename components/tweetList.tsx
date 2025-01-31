@@ -6,7 +6,13 @@ import { useEffect, useRef, useState } from "react";
 import TweetDetails from "./tweetDetails";
 import Tweet from "./tweet/tweet";
 
-export default function TweetList({ initialData }: { initialData: Tweets }) {
+interface TweetListProps {
+  initialData: Tweets;
+  currentUserId: number;
+  shouldRouteBack?: boolean;
+}
+
+export default function TweetList({ initialData, currentUserId, shouldRouteBack }: TweetListProps) {
   const [tweets, setTweets] = useState(initialData.tweets);
   const [page, setPage] = useState(initialData.currentPage);
   const [hasNextPage, setHasNextPage] = useState(initialData.hasNextPage);
@@ -35,11 +41,17 @@ export default function TweetList({ initialData }: { initialData: Tweets }) {
     return () => observer.disconnect();
   }, [page, tweets]);
 
+  useEffect(() => {
+    setTweets(initialData.tweets);
+    setPage(initialData.currentPage);
+    setHasNextPage(initialData.hasNextPage);
+  }, [initialData]);
+
   return (
     <div className="flex flex-col gap-5">
       {tweets.map((tweet) => (
         <Tweet key={tweet.id}>
-          <TweetDetails {...tweet} />
+          <TweetDetails {...tweet} currentUserId={currentUserId} shouldRouteBack={shouldRouteBack} />
         </Tweet>
       ))}
       {/* TODO: 스피너 구현 */}
