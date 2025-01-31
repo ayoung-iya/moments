@@ -1,5 +1,6 @@
 import db from "@/lib/db";
 import { getSession } from "@/lib/session";
+import { PromiseReturnType } from "@prisma/client/extension";
 
 export const getUser = async (userId: number) => {
   const user = await db.user.findUnique({
@@ -19,3 +20,5 @@ export const getMe = async () => {
 
   return user;
 };
+
+export type User = PromiseReturnType<typeof getMe>
