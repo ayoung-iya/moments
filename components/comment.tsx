@@ -1,3 +1,5 @@
+"use client";
+
 import { Comment as CommentProps, CommentsDispatchContext } from "@/context/commentsContext";
 import { DropdownContext } from "@/context/dropdownContext";
 import { formatRelativeTime } from "@/lib/utils";

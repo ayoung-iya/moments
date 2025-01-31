@@ -1,6 +1,6 @@
 "use client";
 
-import { Comments } from "@/app/(tab)/@modal/(...)tweet/[id]/page";
+import { Comments } from "@/app/(tab)/tweet/@modal/(.)[id]/page";
 import { createContext, PropsWithChildren, RefObject, startTransition, useOptimistic, useRef } from "react";
 import { flushSync } from "react-dom";
 

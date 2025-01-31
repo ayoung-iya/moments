@@ -27,14 +27,12 @@ export default function CommentEditForm({ id, initialComment, onFinishEdit }: Co
   };
 
   return (
-    <div className="">
-      <CommentBaseForm
-        comment={comment}
-        handleCommentChange={handleCommentChange}
-        handleSubmit={handleSubmit}
-        onClickCancel={onFinishEdit}
-        isFocus
-      />
-    </div>
+    <CommentBaseForm
+      comment={comment}
+      handleCommentChange={handleCommentChange}
+      handleSubmit={handleSubmit}
+      onClickCancel={onFinishEdit}
+      isFocus
+    />
   );
 }
