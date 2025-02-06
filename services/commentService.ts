@@ -26,6 +26,7 @@ export const postComment = async (tweetId: number, newComment: string) => {
       },
     };
   } finally {
+    revalidateTag('tweets');
     revalidateTag("comments");
   }
 };
@@ -36,7 +37,7 @@ export const putComment = async (id: number, comment: string) => {
       where: { id },
       data: { payload: comment },
     });
-
+    
     return {
       success: true,
     };
@@ -60,11 +61,12 @@ export const deleteComment = async (id: number) => {
   } catch (e) {
     if ((e as PrismaClientKnownRequestError).code === "P2025")
       return {
-        error: {
-          message: "존재하지 않는 id입니다.",
-        },
-      };
-  } finally {
+    error: {
+      message: "존재하지 않는 id입니다.",
+    },
+  };
+} finally {
+    revalidateTag('tweets');
     revalidateTag("comments");
   }
 };

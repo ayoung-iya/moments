@@ -3,7 +3,7 @@
 import { ERROR_MESSAGE } from "@/lib/constants";
 import db from "@/lib/db";
 import { getSession } from "@/lib/session";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
 const tweetSchema = z
@@ -85,7 +85,7 @@ export const handleForm = async (_: any, formData: FormData) => {
     },
   });
 
-  revalidatePath("/tweet");
+  revalidateTag('tweets');
 
   return {
     success: result.success,

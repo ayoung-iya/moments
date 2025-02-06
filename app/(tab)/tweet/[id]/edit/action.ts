@@ -3,7 +3,7 @@
 import db from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { tweetSchema } from "@/services/schema/tweet";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 
 export const handleForm = async (formData: FormData, { id, userId }: { id: number; userId: number }) => {
   const data = {
@@ -55,7 +55,8 @@ export const handleForm = async (formData: FormData, { id, userId }: { id: numbe
     },
   });
 
-  revalidatePath("/tweet");
+  revalidateTag(`tweet-${id}`);
+  revalidateTag("tweets");
 
   return {
     success: result.success,
