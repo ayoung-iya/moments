@@ -7,8 +7,11 @@ import { PromiseReturnType } from "@prisma/client/extension";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import CommentsProvider from "@/context/commentsContext";
 import { getMe } from "@/services/userService";
+import { getIsLike } from "@/services/likeService";
 
 const fetchTweet = async (id: number) => {
+  "use cache";
+  cacheTag(`tweet-${id}`);
   const tweet = await db.tweet.findUnique({
     where: { id },
     include: {
@@ -52,12 +55,16 @@ const getComments = async (tweetId: number) => {
     },
   });
 
+  const commentsCount = await db.comment.count({
+    where: { tweetId },
+  });
+
   const formatComments = comments.map(({ user, ...comment }) => ({
     ...comment,
     username: user.username,
   }));
 
-  return formatComments;
+  return { comments: formatComments, commentsCount };
 };
 
 export type Comments = PromiseReturnType<typeof getComments>;
@@ -65,26 +72,28 @@ export type Comments = PromiseReturnType<typeof getComments>;
 export default async function ModalTweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const myInfo = await getMe();
-  const comments = await getComments(+id);
 
   if (!Number.isInteger(+id)) {
     return null;
   }
 
   const tweet = await fetchTweet(+id);
+  const likeData = await getIsLike(+id, myInfo!.id);
+  const commentsData = await getComments(+id);
+
   if (!tweet) {
     return null;
   }
 
   return (
-    <CommentsProvider comments={comments}>
+    <CommentsProvider {...commentsData}>
       <FramedInterceptModal>
         <div className="flex h-full flex-col">
           <div className="flex h-14 shrink-0 items-center justify-center border-b">
             <span className="text-lg font-bold">{tweet.username}님의 게시물</span>
           </div>
           <div className="scrollbar-custom grow overflow-y-auto p-3">
-            <TweetDetails {...tweet} currentUserId={myInfo!.id} />
+            <TweetDetails {...tweet} currentUserId={myInfo!.id} {...likeData} />
             <CommentList />
           </div>
           <div className="shadow-top">
