@@ -2,7 +2,18 @@ import Logo from "@/components/logo";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function TabLayout({ children, modal }: { children: React.ReactNode; modal: React.ReactNode }) {
+interface LayoutProps {
+  children?: React.ReactNode;
+}
+
+interface LayoutPropsExtended {
+  children?: React.ReactNode;
+  modal?: React.ReactNode;
+}
+
+export default function TabLayout(props: LayoutProps | LayoutPropsExtended) {
+  const { children, modal } = { ...props, modal: undefined };
+
   return (
     <>
       {modal}
