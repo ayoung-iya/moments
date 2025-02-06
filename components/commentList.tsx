@@ -11,7 +11,7 @@ export default function CommentList() {
   return (
     <DropdownProvider>
       <div className="relative flex flex-col gap-2" ref={commentsContainer}>
-        {optimisticComments.map((comment) => (
+        {optimisticComments.comments.map((comment) => (
           <Comment key={comment.id} {...comment} />
         ))}
       </div>
