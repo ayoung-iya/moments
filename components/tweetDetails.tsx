@@ -6,8 +6,16 @@ import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import DeleteButton from "./deleteButton";
 import { deleteTweet } from "@/services/tweetService";
 import { useRouter } from "next/navigation";
+import { FireIcon, ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/solid";
+import { startTransition, useContext, useOptimistic } from "react";
+import { dislikeTweet, likeTweet } from "@/services/likeService";
+import { mutate } from "swr";
+import { unstable_serialize } from "swr/infinite";
+import { getKey } from "./tweetList";
+import { CommentsContext } from "@/context/commentsContext";
 
-type TweetDetailsProps = Tweets["tweets"][number] & {
+type TweetDetailsProps = Omit<Tweets["tweets"][number], "commentsCount"> & {
+  commentsCount?: number;
   currentUserId: number;
   shouldRouteBack?: boolean;
 };
@@ -21,15 +29,44 @@ export default function TweetDetails({
   photoHeight,
   username,
   userId,
+  isLiked,
+  likeCount,
+  commentsCount,
   currentUserId,
   shouldRouteBack,
 }: TweetDetailsProps) {
   const route = useRouter();
+  const [likeInfo, setLikeInfo] = useOptimistic({ isLiked, likeCount }, (previousState) => ({
+    isLiked: !previousState.isLiked,
+    likeCount: previousState.isLiked ? previousState.likeCount - 1 : previousState.likeCount + 1,
+  }));
+  const { optimisticComments } = useContext(CommentsContext);
 
   const handleDeleteClick = async () => {
-    await deleteTweet(id);
-    if (shouldRouteBack) {
-      route.back();
+    try {
+      await deleteTweet(id);
+
+      mutate(unstable_serialize(getKey));
+      if (shouldRouteBack) {
+        route.back();
+      }
+    } catch {
+      console.error("삭제 실패");
+    }
+  };
+
+  const handleLikeClick = async () => {
+    startTransition(() => setLikeInfo(null));
+    try {
+      if (likeInfo.isLiked) {
+        await dislikeTweet(id);
+      } else {
+        await likeTweet(id);
+      }
+
+      mutate(unstable_serialize(getKey));
+    } catch {
+      startTransition(() => setLikeInfo(null));
     }
   };
 
@@ -52,9 +89,25 @@ export default function TweetDetails({
         <Tweet.Content>{tweet}</Tweet.Content>
       </div>
       {photo && <Tweet.Image url={photo} width={photoWidth!} height={photoHeight!} />}
+      <div className="flex gap-3 text-[13px] text-stone-600">
+        <div className="flex items-center gap-1">
+          <FireIcon className="size-4" />
+          <span>{likeInfo.likeCount}</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <ChatBubbleOvalLeftEllipsisIcon className="size-4" />
+          <span>{commentsCount || optimisticComments.commentsCount}</span>
+        </div>
+      </div>
       <div className="border-t py-1">
         <Tweet.ButtonList>
-          <Tweet.Button className="hover:bg-stone-100">좋아요</Tweet.Button>
+          <Tweet.Button
+            className={`flex justify-center gap-1 hover:bg-stone-100 ${likeInfo.isLiked ? "*:text-red-700" : ""}`}
+            onClick={handleLikeClick}
+          >
+            <FireIcon className="size-5 text-stone-600" />
+            <span>좋아요</span>
+          </Tweet.Button>
           <Tweet.Button as="a" href={`/tweet/${id}`} className="hover:bg-stone-100">
             댓글달기
           </Tweet.Button>
