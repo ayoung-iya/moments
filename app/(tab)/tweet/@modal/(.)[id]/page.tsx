@@ -3,11 +3,11 @@ import TweetDetails from "@/components/tweetDetails";
 import FramedInterceptModal from "@/components/framedInterceptModal";
 import db from "@/lib/db";
 import CommentList from "@/components/commentList";
-import { PromiseReturnType } from "@prisma/client/extension";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import CommentsProvider from "@/context/commentsContext";
 import { getMe } from "@/services/userService";
 import { getIsLike } from "@/services/likeService";
+import { getComments } from "@/services/commentService";
 
 const fetchTweet = async (id: number) => {
   "use cache";
@@ -38,36 +38,7 @@ const fetchTweet = async (id: number) => {
   return formatTweet;
 };
 
-const getComments = async (tweetId: number) => {
-  "use cache";
-  cacheTag("comments");
-  const comments = await db.comment.findMany({
-    where: { tweetId },
-    include: {
-      user: {
-        select: {
-          username: true,
-        },
-      },
-    },
-    orderBy: {
-      created_at: "desc",
-    },
-  });
 
-  const commentsCount = await db.comment.count({
-    where: { tweetId },
-  });
-
-  const formatComments = comments.map(({ user, ...comment }) => ({
-    ...comment,
-    username: user.username,
-  }));
-
-  return { comments: formatComments, commentsCount };
-};
-
-export type Comments = PromiseReturnType<typeof getComments>;
 
 export default async function ModalTweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
