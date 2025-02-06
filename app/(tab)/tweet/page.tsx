@@ -10,7 +10,7 @@ export default async function Tweet() {
   const me = await getMe();
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="mt-2 flex flex-col gap-5">
       <div className="flex w-full items-center gap-2 rounded-md bg-white p-3 shadow">
         <Link
           href="/profile"
