@@ -72,7 +72,7 @@ export default function TweetDetails({
 
   return (
     <>
-      <div className="flex flex-col gap-1.5 py-3">
+      <div className="flex flex-col gap-1.5 pt-3">
         <div className="flex items-center justify-between">
           <Tweet.NameWithDate name={username} date={created_at} />
           {currentUserId === userId && (
@@ -89,7 +89,7 @@ export default function TweetDetails({
         <Tweet.Content>{tweet}</Tweet.Content>
       </div>
       {photo && <Tweet.Image url={photo} width={photoWidth!} height={photoHeight!} />}
-      <div className="flex gap-3 text-[13px] text-stone-600">
+      <div className={`flex justify-end gap-3 pb-3 text-[13px] text-stone-600 ${photo ? "pt-3" : ""}`}>
         <div className="flex items-center gap-1">
           <FireIcon className="size-4" />
           <span>{likeInfo.likeCount}</span>
