@@ -6,6 +6,9 @@ import TweetBaseForm from "./tweetBaseForm";
 import { redirect, useRouter } from "next/navigation";
 import { ToastController } from "@/context/toastContext";
 import { handleForm } from "@/app/(tab)/tweet/[id]/edit/action";
+import { mutate } from "swr";
+import { unstable_serialize } from "swr/infinite";
+import { getKey } from "./tweetList";
 
 export interface FormState {
   success: boolean;
@@ -39,6 +42,7 @@ export default function TweetEditForm({ id, tweet, photo, photoWidth, photoHeigh
 
   useEffect(() => {
     if (state?.success) {
+      mutate(unstable_serialize(getKey))
       route.back();
       return;
     }

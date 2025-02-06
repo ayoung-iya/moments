@@ -9,6 +9,9 @@ import { cloudflareImageURL } from "@/lib/cloudflareImageUtils";
 import { redirect, useRouter } from "next/navigation";
 import { getUploadUrl, handleForm } from "@/app/(tab)/tweet/new/action";
 import FramedInterceptModal from "@/components/framedInterceptModal";
+import { useSWRConfig } from "swr";
+import { unstable_serialize } from "swr/infinite";
+import { getKey } from "@/components/tweetList";
 
 export default function ModalNewTweet() {
   const [tweet, setTweet] = useState("");
@@ -18,6 +21,7 @@ export default function ModalNewTweet() {
   const [photoId, setPhotoId] = useState("");
   const { showToast } = useContext(ToastController);
   const route = useRouter();
+  const { mutate } = useSWRConfig();
 
   const photoRatio = photoSize ? photoSize.width / photoSize.height : 14 / 1;
 
@@ -111,6 +115,7 @@ export default function ModalNewTweet() {
 
   useEffect(() => {
     if (state?.success) {
+      mutate(unstable_serialize(getKey));
       route.back();
     }
 
@@ -127,7 +132,7 @@ export default function ModalNewTweet() {
         message: photoErrorMessage,
       });
     }
-  }, [sessionErrorMessage, photoErrorMessage, showToast, route, state?.success]);
+  }, [sessionErrorMessage, photoErrorMessage, showToast, route, state?.success, mutate]);
 
   return (
     <FramedInterceptModal>

@@ -7,6 +7,9 @@ import { deleteComment } from "@/services/commentService";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useContext, useState } from "react";
 import CommentEditForm from "./commentEditForm";
+import { mutate } from "swr";
+import { unstable_serialize } from "swr/infinite";
+import { getKey } from "./tweetList";
 
 export default function Comment({ id, username, created_at, payload, isSending }: CommentProps) {
   const [isEdit, setIsEdit] = useState(false);
@@ -24,6 +27,7 @@ export default function Comment({ id, username, created_at, payload, isSending }
   const handleDeleteComment = async () => {
     deleteOptimisticComment(id);
     await deleteComment(id);
+    mutate(unstable_serialize(getKey));
   };
 
   if (isEdit) {
