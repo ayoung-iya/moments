@@ -1,6 +1,7 @@
-import TweetItem from "@/components/tweetDetails";
+import TweetDetails from "@/components/tweetDetails";
 import db from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getIsLike } from "@/services/likeService";
+import { getMe } from "@/services/userService";
 import { notFound } from "next/navigation";
 
 const fetchTweet = async (id: number) => {
@@ -32,11 +33,12 @@ const fetchTweet = async (id: number) => {
 
 export default async function Tweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const session = await getSession();
+  const myInfo = await getMe();
   if (!Number.isInteger(+id)) {
     return notFound();
   }
   const tweet = await fetchTweet(+id);
+  const likeData = await getIsLike(+id, myInfo!.id);
 
-  return <TweetItem {...tweet} currentUserId={session.id!} />;
+  return <TweetDetails {...tweet} currentUserId={myInfo!.id} {...likeData} />;
 }
