@@ -1,7 +1,7 @@
 "use client";
 
 import { getTweets } from "@/app/(tab)/tweet/action";
-import { useEffect, useRef } from "react";
+import { Fragment, useEffect, useRef } from "react";
 import TweetDetails from "./tweetDetails";
 import Tweet from "./tweet/tweet";
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
@@ -61,7 +61,27 @@ export default function TweetList({ currentUserId, shouldRouteBack }: TweetListP
   }, [isValidating, size, setSize]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col gap-5">
+        {Array.from({ length: 2 }, (_, index) => (
+          <Fragment key={index}>
+            <Tweet>
+              <div className="animate-pulse py-3">
+                <div className="mb-3 h-5 w-36 rounded-md bg-stone-200" />
+                <div className="mb-3 h-5 w-4/5 rounded-md bg-stone-200" />
+                <div className="aspect-[4/3] w-full rounded-md bg-stone-200" />
+              </div>
+            </Tweet>
+            <Tweet>
+              <div className="animate-pulse py-3">
+                <div className="mb-3 h-5 w-36 rounded-md bg-stone-200" />
+                <div className="mb-3 h-16 w-full rounded-md bg-stone-200" />
+              </div>
+            </Tweet>
+          </Fragment>
+        ))}
+      </div>
+    );
   }
 
   return (
