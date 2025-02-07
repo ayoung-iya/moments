@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mx-auto flex min-h-screen max-w-screen-sm flex-col items-center justify-between pt-3 pb-20 py-11">
+    <div className="mx-auto flex min-h-dvh max-w-screen-sm flex-col items-center justify-between pt-3 pb-20 py-11">
       <div className="mt-24 text-center">
         <h1 className="mb-4 text-5xl font-bold sm:text-6xl">
           <Logo size="base" />
