@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Home() {
   return (
-    <div className="mx-auto flex min-h-screen max-w-screen-sm flex-col items-center justify-between px-3 py-11">
+    <div className="mx-auto flex min-h-screen max-w-screen-sm flex-col items-center justify-between pt-3 pb-20 py-11">
       <div className="mt-24 text-center">
         <h1 className="mb-4 text-5xl font-bold sm:text-6xl">
           <Logo size="base" />
@@ -12,7 +12,7 @@ export default function Home() {
         <p className="font-medium sm:text-lg">자유롭게 공유하세요</p>
       </div>
 
-      <div className="flex w-full flex-col gap-3">
+      <div className="flex w-full flex-col gap-3 px-3">
         <Link href="/create-account" className="primary-button h-11 focus:scale-95 sm:h-12">
           시작하기
         </Link>
