@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   const isPublicPath = PUBLIC_URLS.has(request.nextUrl.pathname);
 
   if (!(session.id || isPublicPath)) {
-    return NextResponse.redirect(new URL("/", request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
   }
 
   if (session.id && isPublicPath) {
