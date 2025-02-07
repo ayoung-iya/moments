@@ -33,7 +33,7 @@ export default function TweetList({ currentUserId, shouldRouteBack }: TweetListP
     },
   );
 
-  const ref = useRef<HTMLInputElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
 
   const tweets = data?.flatMap(({ tweets }) => tweets);
   const hasNextPage = data?.at(-1)?.hasNextPage;
@@ -71,8 +71,12 @@ export default function TweetList({ currentUserId, shouldRouteBack }: TweetListP
           <TweetDetails {...tweet} currentUserId={currentUserId} shouldRouteBack={shouldRouteBack} />
         </Tweet>
       ))}
-      {/* TODO: 스피너 구현 */}
-      {hasNextPage && <p ref={ref}>intercept</p>}
+      {hasNextPage && (
+        <div
+          className="mx-auto mt-3 size-8 animate-spin rounded-full border-2 border-stone-600/30 border-t-stone-600 sm:mt-5 sm:size-10 sm:border-4"
+          ref={ref}
+        />
+      )}
     </div>
   );
 }
