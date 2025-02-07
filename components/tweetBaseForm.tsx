@@ -2,7 +2,7 @@
 
 import FormButton from "@/components/formButton";
 import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline";
-import { ChangeEventHandler, useContext, useState } from "react";
+import { ChangeEventHandler, startTransition, useContext, useState } from "react";
 import { ToastController } from "@/context/toastContext";
 import { MAX_IMAGE_SIZE } from "@/lib/constants";
 import { cloudflareImageURL, cloudflareImageVariantURL } from "@/lib/cloudflareImageUtils";
@@ -134,7 +134,7 @@ export default function TweetBaseForm({
       formData.set("photo", "");
     }
 
-    return onSubmit(formData);
+    startTransition(() => onSubmit(formData));
   };
 
   return (
