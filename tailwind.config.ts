@@ -13,7 +13,8 @@ export default {
         foreground: "var(--foreground)",
       },
       boxShadow: {
-        top: '0 -5px 10px -6px rgba(0,0,0,.1)'
+        top: "0 -5px 10px -6px rgba(0,0,0,.1)",
+        "t-border": "inset 0 1px rgb(229, 231, 235)",
       },
     },
   },
