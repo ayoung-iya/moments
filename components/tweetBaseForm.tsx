@@ -130,6 +130,10 @@ export default function TweetBaseForm({
       formData.set("photo", cloudflareImageURL(photoId));
       formData.set("photoWidth", photoSize?.width + "");
       formData.set("photoHeight", photoSize?.height + "");
+    } else if (initialPreview && preview.startsWith(initialPreview)) {
+      formData.set("photo", initialPreview);
+      formData.set("photoWidth", photoSize?.width + "");
+      formData.set("photoHeight", photoSize?.height + "");
     } else {
       formData.set("photo", "");
     }
