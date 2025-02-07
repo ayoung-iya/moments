@@ -2,21 +2,9 @@ import Logo from "@/components/logo";
 import Image from "next/image";
 import Link from "next/link";
 
-interface LayoutProps {
-  children?: React.ReactNode;
-}
-
-interface LayoutPropsExtended {
-  children?: React.ReactNode;
-  modal?: React.ReactNode;
-}
-
-export default function TabLayout(props: LayoutProps | LayoutPropsExtended) {
-  const { children, modal } = { ...props, modal: undefined };
-
+export default function TabLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
-      {modal}
       <nav className="flex items-center justify-between px-4 py-3">
         <Link href="/">
           <Logo size="sm" />

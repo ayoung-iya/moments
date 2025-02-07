@@ -38,8 +38,6 @@ const fetchTweet = async (id: number) => {
   return formatTweet;
 };
 
-
-
 export default async function ModalTweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const myInfo = await getMe();
