@@ -89,7 +89,11 @@ export default function TweetDetails({
         </div>
         <Tweet.Content>{tweet}</Tweet.Content>
       </div>
-      {photo && <Tweet.Image url={photo} width={photoWidth!} height={photoHeight!} />}
+      {photo && (
+        <div className="mt-3">
+          <Tweet.Image url={photo} width={photoWidth!} height={photoHeight!} />
+        </div>
+      )}
       <div className={`flex justify-end gap-3 pb-3 text-[13px] text-stone-600 ${photo ? "pt-3" : ""}`}>
         <div className="flex items-center gap-1">
           <FireIcon className="size-4" />

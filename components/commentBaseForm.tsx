@@ -97,7 +97,7 @@ export default function CommentForm({
       <div className="flex shrink-0 flex-col items-center px-3 py-2">
         <textarea
           name="comment"
-          className="scrollbar-custom my-2 h-6 w-full grow resize-none border-b border-stone-200 outline-none focus:border-stone-500"
+          className="scrollbar-custom my-2 h-6 w-full grow resize-none border-b border-stone-200 bg-inherit outline-none focus:border-stone-500"
           onChange={handleValueChange}
           onKeyDown={handleKeyDown}
           value={comment}
@@ -113,7 +113,7 @@ export default function CommentForm({
             취소
           </button>
           <button
-            className="shrink-0 rounded-md px-2 py-1 font-bold text-stone-700 hover:bg-stone-100 disabled:bg-white disabled:text-stone-300 hover:disabled:bg-white"
+            className="shrink-0 rounded-md px-2 py-1 font-bold text-stone-700 hover:bg-stone-100 disabled:bg-inherit disabled:text-stone-300 hover:disabled:bg-inherit"
             disabled={!comment.trim()}
           >
             댓글
