@@ -4,6 +4,7 @@ import db from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { revalidateTag } from "next/cache";
+import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 
 export type Tweet = {
   username: string;
@@ -20,6 +21,8 @@ export type Tweet = {
 type UpdateTweetInfo = Pick<Tweet, "id" | "tweet"> & Partial<Pick<Tweet, "photo" | "photoWidth" | "photoHeight">>;
 
 export const getTweet = async (id: number) => {
+  "use cache";
+  cacheTag(`tweet-${id}`);
   const tweet = await db.tweet.findUnique({
     where: { id },
     include: {

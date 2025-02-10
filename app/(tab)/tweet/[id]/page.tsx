@@ -2,46 +2,25 @@ import CommentCreateForm from "@/components/commentCreateForm";
 import CommentList from "@/components/commentList";
 import TweetDetails from "@/components/tweetDetails";
 import CommentsProvider from "@/context/commentsContext";
-import db from "@/lib/db";
 import { getComments } from "@/services/commentService";
 import { getIsLike } from "@/services/likeService";
+import { getTweet } from "@/services/tweetService";
 import { getMe } from "@/services/userService";
 import { notFound } from "next/navigation";
 
-const fetchTweet = async (id: number) => {
-  const tweet = await db.tweet.findUnique({
-    where: { id },
-    include: {
-      user: {
-        select: {
-          username: true,
-        },
-      },
-    },
-  });
-
-  if (!tweet) {
-    notFound();
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user, ...rest } = tweet;
-
-  const formatTweet = {
-    ...rest,
-    username: tweet?.user.username,
-  };
-
-  return formatTweet;
-};
-
 export default async function Tweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const myInfo = await getMe();
   if (!Number.isInteger(+id)) {
     return notFound();
   }
-  const tweet = await fetchTweet(+id);
+
+  const tweet = await getTweet(+id);
+
+  if (!tweet) {
+    return notFound();
+  }
+
+  const myInfo = await getMe();
   const likeData = await getIsLike(+id, myInfo!.id);
   const commentsData = await getComments(+id);
 

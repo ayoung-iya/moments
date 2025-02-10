@@ -1,42 +1,12 @@
 import CommentCreateForm from "@/components/commentCreateForm";
 import TweetDetails from "@/components/tweetDetails";
 import FramedInterceptModal from "@/components/framedInterceptModal";
-import db from "@/lib/db";
 import CommentList from "@/components/commentList";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import CommentsProvider from "@/context/commentsContext";
 import { getMe } from "@/services/userService";
 import { getIsLike } from "@/services/likeService";
 import { getComments } from "@/services/commentService";
-
-const fetchTweet = async (id: number) => {
-  "use cache";
-  cacheTag(`tweet-${id}`);
-  const tweet = await db.tweet.findUnique({
-    where: { id },
-    include: {
-      user: {
-        select: {
-          username: true,
-        },
-      },
-    },
-  });
-
-  if (!tweet) {
-    return null;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { user, ...rest } = tweet;
-
-  const formatTweet = {
-    ...rest,
-    username: tweet?.user.username,
-  };
-
-  return formatTweet;
-};
+import { getTweet } from "@/services/tweetService";
 
 export default async function ModalTweet({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -46,7 +16,7 @@ export default async function ModalTweet({ params }: { params: Promise<{ id: str
     return null;
   }
 
-  const tweet = await fetchTweet(+id);
+  const tweet = await getTweet(+id);
   const likeData = await getIsLike(+id, myInfo!.id);
   const commentsData = await getComments(+id);
 
