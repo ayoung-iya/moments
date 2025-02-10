@@ -102,4 +102,12 @@ export const deleteComment = async (id: number) => {
   }
 };
 
+export const getCommentsCount = async (tweetId: number) => {
+  const commentsCount = await db.comment.count({
+    where: { tweetId },
+  });
+
+  return { commentsCount };
+};
+
 export type Comments = PromiseReturnType<typeof getComments>;
