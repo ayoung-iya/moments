@@ -5,8 +5,7 @@ import CommentBaseForm from "./commentBaseForm";
 import { CommentsDispatchContext } from "@/context/commentsContext";
 import { postComment } from "@/services/commentService";
 import { mutate } from "swr";
-import { getKey } from "./tweetList";
-import { unstable_serialize } from "swr/infinite";
+import { flushSync } from "react-dom";
 
 interface CommentCreateFormParams {
   tweetId: number;
@@ -23,9 +22,9 @@ export default function CommentCreateForm({ tweetId, username }: CommentCreateFo
 
   const handleSubmit = async () => {
     addComment(comment, username);
-    setComment("");
+    flushSync(() => setComment(""));
     const result = await postComment(tweetId, comment);
-    mutate(unstable_serialize(getKey));
+    mutate(`/tweet/${tweetId}/commentsCount`);
     return result;
   };
 

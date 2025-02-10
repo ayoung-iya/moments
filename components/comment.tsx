@@ -8,10 +8,8 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/outline";
 import { useContext, useState } from "react";
 import CommentEditForm from "./commentEditForm";
 import { mutate } from "swr";
-import { unstable_serialize } from "swr/infinite";
-import { getKey } from "./tweetList";
 
-export default function Comment({ id, username, created_at, payload, isSending }: CommentProps) {
+export default function Comment({ id, tweetId, username, created_at, payload, isSending }: CommentProps) {
   const [isEdit, setIsEdit] = useState(false);
   const { deleteComment: deleteOptimisticComment } = useContext(CommentsDispatchContext);
   const { openId, toggleDropdown, ref, closeDropdown } = useContext(DropdownContext);
@@ -27,7 +25,7 @@ export default function Comment({ id, username, created_at, payload, isSending }
   const handleDeleteComment = async () => {
     deleteOptimisticComment(id);
     await deleteComment(id);
-    mutate(unstable_serialize(getKey));
+    mutate(`/tweet/${tweetId}/commentsCount`);
   };
 
   if (isEdit) {
