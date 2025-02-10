@@ -1,6 +1,7 @@
 "use server";
 import db from "@/lib/db";
 import { getSession } from "@/lib/session";
+import { PromiseReturnType } from "@prisma/client/extension";
 import { revalidateTag } from "next/cache";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 
@@ -43,3 +44,5 @@ export const dislikeTweet = async (tweetId: number) => {
   revalidateTag(`tweet-${tweetId}-like`);
   revalidateTag("tweets");
 };
+
+export type LikeInfo = PromiseReturnType<typeof getIsLike>;
