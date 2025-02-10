@@ -6,10 +6,9 @@ import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 interface GetTweetsProps {
   page?: number;
   size?: number;
-  currentUserId: number;
 }
 
-export const getTweets = async ({ page = 0, size = 5, currentUserId }: GetTweetsProps) => {
+export const getTweets = async ({ page = 0, size = 5 }: GetTweetsProps) => {
   "use cache";
   cacheTag("tweets");
 
@@ -26,26 +25,13 @@ export const getTweets = async ({ page = 0, size = 5, currentUserId }: GetTweets
           username: true,
         },
       },
-      likes: {
-        where: { userId: currentUserId },
-        select: { userId: true },
-      },
-      _count: {
-        select: {
-          likes: true,
-          comments: true,
-        },
-      },
     },
   });
 
-  const formatTweets = tweets.map(({ user, likes, _count, ...tweet }) => {
+  const formatTweets = tweets.map(({ user, ...tweet }) => {
     return {
       ...tweet,
       username: user.username,
-      isLiked: !!likes.length,
-      likeCount: _count.likes,
-      commentsCount: _count.comments,
     };
   });
 
