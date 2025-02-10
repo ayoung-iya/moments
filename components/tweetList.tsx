@@ -2,9 +2,9 @@
 
 import { getTweets } from "@/app/(tab)/tweet/action";
 import { Fragment, useEffect, useRef } from "react";
-import TweetDetails from "./tweetDetails";
 import Tweet from "./tweet/tweet";
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
+import TweetDetailsClientFetch from "./tweetDetailsClientFetch";
 
 interface TweetListProps {
   currentUserId: number;
@@ -19,14 +19,14 @@ export const getKey: SWRInfiniteKeyLoader = (pageIndex, previousPageData) => {
   return `/tweets?page=${pageIndex}`;
 };
 
-export default function TweetList({ currentUserId, shouldRouteBack }: TweetListProps) {
+export default function TweetList({ currentUserId }: TweetListProps) {
   const { data, isLoading, isValidating, size, setSize } = useSWRInfinite(
     getKey,
     (url: string) => {
       const params = new URLSearchParams(url.split("?")[1]);
       const page = Number(params.get("page"));
 
-      return getTweets({ page, currentUserId });
+      return getTweets({ page });
     },
     {
       revalidateAll: true,
@@ -88,7 +88,7 @@ export default function TweetList({ currentUserId, shouldRouteBack }: TweetListP
     <div className="flex flex-col gap-5">
       {tweets?.map((tweet) => (
         <Tweet key={tweet.id}>
-          <TweetDetails {...tweet} currentUserId={currentUserId} shouldRouteBack={shouldRouteBack} />
+          <TweetDetailsClientFetch {...tweet} currentUserId={currentUserId} />
         </Tweet>
       ))}
       {hasNextPage && (

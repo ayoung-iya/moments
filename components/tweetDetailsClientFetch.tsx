@@ -1,26 +1,24 @@
 "use client";
 
+import { Tweets } from "@/app/(tab)/tweet/page";
 import Tweet from "./tweet/tweet";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import DeleteButton from "./deleteButton";
-import { deleteTweet, Tweet as TweetInfo } from "@/services/tweetService";
-import { useRouter } from "next/navigation";
+import { deleteTweet } from "@/services/tweetService";
 import { FireIcon, ChatBubbleOvalLeftEllipsisIcon } from "@heroicons/react/24/solid";
-import { startTransition, useContext, useOptimistic } from "react";
-import { dislikeTweet, LikeInfo, likeTweet } from "@/services/likeService";
-import { mutate } from "swr";
+import { startTransition, useOptimistic } from "react";
+import { dislikeTweet, getIsLike, likeTweet } from "@/services/likeService";
+import useSWR, { mutate } from "swr";
 import { unstable_serialize } from "swr/infinite";
 import { getKey } from "./tweetList";
-import { CommentsContext } from "@/context/commentsContext";
 import Link from "next/link";
+import { getCommentsCount } from "@/services/commentService";
 
-type TweetDetailsProps = TweetInfo &
-  LikeInfo & {
-    currentUserId: number;
-    shouldRouteBack?: boolean;
-  };
+type TweetDetailsProps = Omit<Tweets["tweets"][number], "commentsCount"> & {
+  currentUserId: number;
+};
 
-export default function TweetDetails({
+export default function TweetDetailsClientFetch({
   id,
   created_at,
   tweet,
@@ -29,26 +27,22 @@ export default function TweetDetails({
   photoHeight,
   username,
   userId,
-  isLiked,
-  likeCount,
   currentUserId,
-  shouldRouteBack,
 }: TweetDetailsProps) {
-  const route = useRouter();
-  const [likeInfo, setLikeInfo] = useOptimistic({ isLiked, likeCount }, (previousState) => ({
-    isLiked: !previousState.isLiked,
-    likeCount: previousState.isLiked ? previousState.likeCount - 1 : previousState.likeCount + 1,
-  }));
-  const { optimisticComments } = useContext(CommentsContext);
+  const { data: likeData, mutate: likeMutate } = useSWR(`/tweet/${id}/like`, () => getIsLike(id, currentUserId));
+  const { data: commentsData } = useSWR(`/tweet/${id}/commentsCount`, () => getCommentsCount(id));
+  const [likeInfo, setLikeInfo] = useOptimistic(
+    { isLiked: likeData?.isLiked || false, likeCount: likeData?.likeCount || 0 },
+    (previousState) => ({
+      isLiked: !previousState.isLiked,
+      likeCount: previousState.isLiked ? previousState.likeCount - 1 : previousState.likeCount + 1,
+    }),
+  );
 
   const handleDeleteClick = async () => {
     try {
       await deleteTweet(id);
-
       mutate(unstable_serialize(getKey));
-      if (shouldRouteBack) {
-        route.back();
-      }
     } catch {
       console.error("삭제 실패");
     }
@@ -63,7 +57,7 @@ export default function TweetDetails({
         await likeTweet(id);
       }
 
-      mutate(`/tweet/${id}/like`);
+      likeMutate();
     } catch {
       startTransition(() => setLikeInfo(null));
     }
@@ -99,7 +93,7 @@ export default function TweetDetails({
         </div>
         <div className="flex items-center gap-1">
           <ChatBubbleOvalLeftEllipsisIcon className="size-4" />
-          <span>{optimisticComments.commentsCount}</span>
+          <span>{commentsData?.commentsCount}</span>
         </div>
       </div>
       <div className="border-t py-1">
@@ -111,7 +105,7 @@ export default function TweetDetails({
             <FireIcon className="size-5 text-stone-600" />
             <span>좋아요</span>
           </button>
-          <Link href={`/tweet/${id}`} className="hover:bg-stone-100">
+          <Link href={`/tweet/${id}`} className="hover:bg-stone-100" prefetch={false}>
             댓글달기
           </Link>
         </Tweet.ButtonList>
