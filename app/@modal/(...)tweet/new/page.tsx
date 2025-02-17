@@ -7,7 +7,7 @@ import { ToastController } from "@/context/toastContext";
 import { MAX_IMAGE_SIZE } from "@/lib/constants";
 import { cloudflareImageURL } from "@/lib/cloudflareImageUtils";
 import { redirect, useRouter } from "next/navigation";
-import { getUploadUrl, handleForm } from "@/app/(tab)/tweet/new/action";
+import { getUploadUrl, handleForm } from "@/app/(tab)/(default)/tweet/new/action";
 import FramedInterceptModal from "@/components/framedInterceptModal";
 import { useSWRConfig } from "swr";
 import { unstable_serialize } from "swr/infinite";

@@ -5,7 +5,7 @@ import { useActionState, useContext, useEffect } from "react";
 import TweetBaseForm from "./tweetBaseForm";
 import { redirect, useRouter } from "next/navigation";
 import { ToastController } from "@/context/toastContext";
-import { handleForm } from "@/app/(tab)/tweet/[id]/edit/action";
+import { handleForm } from "@/app/(tab)/(default)/tweet/[id]/edit/action";
 import { mutate } from "swr";
 import { unstable_serialize } from "swr/infinite";
 import { getKey } from "./tweetList";

@@ -6,7 +6,7 @@ import { ChangeEventHandler, startTransition, useContext, useState } from "react
 import { ToastController } from "@/context/toastContext";
 import { MAX_IMAGE_SIZE } from "@/lib/constants";
 import { cloudflareImageURL, cloudflareImageVariantURL } from "@/lib/cloudflareImageUtils";
-import { getUploadUrl } from "@/app/(tab)/tweet/new/action";
+import { getUploadUrl } from "@/app/(tab)/(default)/tweet/new/action";
 import { Tweet } from "@/services/tweetService";
 import { FormState } from "./tweetEditForm";
 

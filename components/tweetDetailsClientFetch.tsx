@@ -1,6 +1,6 @@
 "use client";
 
-import { Tweets } from "@/app/(tab)/tweet/page";
+import { Tweets } from "@/app/(tab)/(default)/tweet/page";
 import Tweet from "./tweet/tweet";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import DeleteButton from "./deleteButton";

@@ -1,6 +1,6 @@
 "use client";
 
-import { getTweets } from "@/app/(tab)/tweet/action";
+import { getTweets } from "@/app/(tab)/(default)/tweet/action";
 import { Fragment, useEffect, useRef } from "react";
 import Tweet from "./tweet/tweet";
 import useSWRInfinite, { SWRInfiniteKeyLoader } from "swr/infinite";
