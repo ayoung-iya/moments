@@ -17,9 +17,11 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  tweets   Tweet[]
-  likes    Like[]
-  comments Comment[]
+  tweets    Tweet[]
+  likes     Like[]
+  comments  Comment[]
+  chatRooms ChatRoom[]
+  messages  Message[]
 }
 
 model Tweet {
@@ -61,4 +63,25 @@ model Comment {
   tweet   Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
   userId  Int
   tweetId Int
+}
+
+model ChatRoom {
+  id       String    @id @default(cuid())
+  users    User[]
+  messages Message[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  payload    String
+  room       ChatRoom @relation(fields: [chatRoomId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+  chatRoomId String
+  userId     Int
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 }
