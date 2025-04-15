@@ -16,7 +16,7 @@ export default function ToastContainer() {
   const { closeToast } = useContext(ToastController);
 
   return (
-    <div className="fixed right-2 top-2 flex flex-col gap-2">
+    <div className="fixed right-2 top-2 flex flex-col gap-2 z-50">
       {toasts.map((toast) => (
         <div
           key={toast.id}
