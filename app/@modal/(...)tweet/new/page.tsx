@@ -113,10 +113,14 @@ export default function ModalNewTweet() {
   const sessionErrorMessage = state?.errors?.session?.[0];
   const photoErrorMessage = state?.errors?.session?.[0];
 
-  useEffect(() => {
+  useEffect(() => {    
     if (state?.success) {
-      mutate(unstable_serialize(getKey));
-      route.back();
+      const tweetPageMutate = async() => {
+        await mutate(unstable_serialize(getKey));
+        route.back();
+      }
+      
+      tweetPageMutate();
     }
 
     if (sessionErrorMessage) {

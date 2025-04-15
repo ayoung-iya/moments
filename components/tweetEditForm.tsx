@@ -42,8 +42,12 @@ export default function TweetEditForm({ id, tweet, photo, photoWidth, photoHeigh
 
   useEffect(() => {
     if (state?.success) {
-      mutate(unstable_serialize(getKey))
-      route.back();
+      const tweetPageMutate = async() => {
+        await mutate(unstable_serialize(getKey));
+        route.back();
+      }
+      
+      tweetPageMutate();
       return;
     }
 
